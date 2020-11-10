@@ -13,31 +13,39 @@ This repository is just a template for a library built using [CMake](https://cma
 
 2. Edit the top level `CMakefile.txt` and replace _ProjectTemplate_ in the project command with your own project name (leave the .Top suffix).
 
-3. Put the headers for your public functions and classes in `prod/include/`.
+3. Put the headers for your public functions and classes in `lib/include/`.
 
-4. Put the headers for your private functions and classes and the implementation files in `prod/sources/`.
+4. Put the headers for your private functions and classes and the implementation files in `lib/sources/`.
 
-5. Edit `prod/CMakefile.txt` and replace _ProjectTemplate_ in the project command with your own project name (this time without any suffix). This will be the base name for the library file. You may also update your project version in the project command.
+5. Edit `lib/CMakefile.txt` and replace _ProjectTemplate_ in the project command with your own project name (this time without the ".Top" suffix, and also don't use any "lib" prefix or suffix in the project name). This will be the base name for the library file. You may also update your project version in the project command.
 
-6. Edit `prod/CMakefile.txt` and set the list of source and header files, and modify any other parameters that you like.
+6. Edit `lib/CMakefile.txt` and set the list of source and header files, and modify any other parameters that you like.
 
 7. Add your common mocks and expectation functions to `test/Mocks`. 
 
 8. To create unit tests, copy the `test/TestTemplate/` directory to another directory under `test/` renaming it with the test name, then:
-   - Rename `UnitUnderTest_test.cpp` according to your test name (recommend leaving the _ _test_ suffix).
-   - Edit the test's `CMakefile.txt` and replace _ProjectTemplate_ in the project command with your own project name and test name (e.g. "_YourProjectName_.Test._YourTestName_").
-   - Edit the test's `CMakefile.txt` and set the list of production source files to be tested, and the list of test source files (test, mocks, other test helper functions, etc.).
-   - Edit your test implementation file to add your tests.
+   - Rename the test implementation file `TestModule_test.cpp` according to your test module name (It's recommended to leave the _ _test_ suffix).
+   - Edit the test's `CMakefile.txt`:
+       - Replace _ProjectTemplate_ and _TestModule_ in the project command with your own project name and test module name (e.g. "_YourProjectName_.Test._YourTestModuleName_").
+       - Set the list of production source files to be tested, and the list of test source files (test, mocks, other test helper functions, etc.).
+   - Edit the test implementation file to add your tests.
 
-9. Edit `test/CMakefile.txt` and replace _ProjectTemplate_ in the project command with your own project name (leave the .AllTest suffix).
+9. Edit `test/CMakefile.txt` and add all the subdirectories for your tests.
 
-10. Edit `test/CMakefile.txt` and add all the subdirectories for your tests.
+10. To create examples, copy the `examples/ExampleTemplate/` directory to another directory under `examples/` renaming it with the example name, then:
+   - Rename the example implementation file `ExampleTemplate.cpp` according to your example's name.
+   - Edit the examples's `CMakefile.txt`:
+       - Replace _ProjectTemplate_ and _ExampleTemplate_ in the project command with your own project name and example name (e.g. "_YourProjectName_.Test._YourExampleName_").
+       - Set the list of source files for the example.
+   - Edit the example implementation file to add your tests.
 
-11. Delete all the exemple files.
+11. Edit `examples/CMakefile.txt` and add all the subdirectories for your examples.
 
-12. Replace `LICENSE.txt` with your project's license file.
+12. Delete all the test, production and example example files and directories.
 
-13. Create a build directory under the top directory (e.g. `build/`), and inside it execute `cmake .. G "<GeneratorOfYourChoice>"` (add any other configuration options that you like).
+13. Replace `LICENSE.txt` with your project's license file.
+
+14. Create a build directory under the top directory (e.g. `build/`), and inside it execute `cmake .. G "<GeneratorOfYourChoice>"` (add any other configuration options that you like).
 
 ## CMake Project Options
 

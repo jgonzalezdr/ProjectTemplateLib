@@ -1,37 +1,14 @@
-option( COVERAGE_VERBOSE "Coverage analysis is performed in verbose mode" OFF )
-
 if( CI_MODE OR MSVC )
     set( IGNORE_ERROR || exit /b 0 )
 endif()
 
+set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/" )
+
 # Test errors are ignored with MSVC to avoid the IDE nagging
-add_custom_target( run_tests COMMAND ctest -V ${IGNORE_ERROR} )
+add_custom_target( run_tests COMMAND ctest -V ${IGNORE_ERROR} DEPENDS build_tests )
 
 #
-# xUnit report merging
-#
-
-if( CI_MODE AND NOT WIN32 )
-
-    find_program( MERGE_XUNIT merge_xunit_results.py )
-    if( NOT EXISTS ${MERGE_XUNIT} )
-        message( FATAL_ERROR "merge_xunit_results.py is not installed" )
-    endif()
-
-    set( XUNIT_OUT_PATH "reports/xunit/" )
-    set( XUNIT_OUT_FILE "xunit.xml" )
-
-    add_custom_target( xunit_report
-                       COMMAND ${CMAKE_COMMAND} -E make_directory ${XUNIT_OUT_PATH}
-                       COMMAND ${MERGE_XUNIT} -o ${XUNIT_OUT_PATH}${XUNIT_OUT_FILE} `find . -name cpputest_*.xml`
-                       DEPENDS run_tests )
-
-    add_dependencies( ci xunit_report )
-
-endif()
-
-#
-# LCOV
+# Coverage with GCC/MinGW
 #
 
 if( COVERAGE AND NOT MSVC )
@@ -40,23 +17,9 @@ if( COVERAGE AND NOT MSVC )
     set( CMAKE_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_COVERAGE} -g -O0 -fprofile-arcs -ftest-coverage -fno-inline -fno-omit-frame-pointer -fno-optimize-sibling-calls" )
     set( CMAKE_EXE_LINKER_FLAGS_COVERAGE "${CMAKE_EXE_LINKER_FLAGS_COVERAGE} -fprofile-arcs -ftest-coverage" )
 
-    find_program( PERL perl )
-    if( NOT EXISTS ${PERL} )
-        message( FATAL_ERROR "Perl is not installed" )
-    else()
-        message( STATUS "Found Perl: ${PERL}" )
-    endif()
+    find_package( Perl REQUIRED )
 
-    if( WIN32 )
-        set( LCOV_PATHS "C:/Devel/lcov/bin" "C:/lcov/bin" )
-    endif()
-
-    find_program( LCOV lcov PATHS ${LCOV_PATHS} )
-    if( NOT EXISTS ${LCOV} )
-        message( FATAL_ERROR "LCOV is not installed" )
-    else()
-        message( STATUS "Found LCOV: ${LCOV}" )
-    endif()
+    find_package( LCOV REQUIRED )
 
     if( COVERAGE_OUTDIR )
         set( COVDST_DIR ${COVERAGE_OUTDIR} )
@@ -68,64 +31,70 @@ if( COVERAGE AND NOT MSVC )
         endif()
     endif()
 
-    if( NOT CI_MODE )
-        set( LCOV_ARGS --rc lcov_branch_coverage=1 )
-    endif()
+    set( LCOV_COMMON_ARGS --rc lcov_branch_coverage=1 --rc geninfo_no_exception_branch=1 )
 
     set( COVSRC_DIR ${CMAKE_SOURCE_DIR} )
 
     if( NOT COVERAGE_VERBOSE )
-        set( LCOV_ARGS -q ${LCOV_ARGS} )
+        set( LCOV_COMMON_ARGS -q ${LCOV_COMMON_ARGS} )
     endif()
 
+    if( NOT WIN32 )
+        string( REPLACE "gcc" "gcov" GCOV_TOOL ${CMAKE_C_COMPILER} )
+        set( LCOV_ARGS --gcov-tool ${GCOV_TOOL} ${LCOV_ARGS} )
+    endif()
+
+    set( LCOV_ARGS ${LCOV_ARGS} ${LCOV_COMMON_ARGS} )
+    set( GENHTML_ARGS ${GENHTML_ARGS} ${LCOV_COMMON_ARGS} )
+
     if( NOT COVERAGE_INCLUDED )
-        set( COVERAGE_INCLUDED \"*\\prod\\sources\\*\" )
+        set( COVERAGE_INCLUDED \"*/lib/sources/*\" )
     endif()
 
     add_custom_target( coverage_clean
                        COMMAND ${CMAKE_COMMAND} -E make_directory ${COVDST_DIR}
-                       COMMAND ${PERL} ${LCOV} -z -d ${CMAKE_BINARY_DIR}
-                       COMMAND ${PERL} ${LCOV} ${LCOV_ARGS} -c -i -d ${CMAKE_BINARY_DIR} -b ${COVSRC_DIR} -o ${COVDST_DIR}/app_base.info
-                       DEPENDS build )
+                       COMMAND ${PERL_EXECUTABLE} ${LCOV_EXECUTABLE} -z -d ${CMAKE_BINARY_DIR}
+                       DEPENDS build_tests )
 
-    add_dependencies( run_tests coverage_clean )
+    add_custom_target( coverage_initial
+                       COMMAND ${PERL_EXECUTABLE} ${LCOV_EXECUTABLE} ${LCOV_ARGS} -c -i --no-external -d ${CMAKE_BINARY_DIR} -b ${COVSRC_DIR} -o ${COVDST_DIR}/app_base.info
+                       DEPENDS coverage_clean )
 
-    add_custom_target( coverage_process
-                       COMMAND ${PERL} ${LCOV} ${LCOV_ARGS} -c -d ${CMAKE_BINARY_DIR} -b ${COVSRC_DIR} -o ${COVDST_DIR}/app_test.info
-                       COMMAND ${PERL} ${LCOV} ${LCOV_ARGS} -a ${COVDST_DIR}/app_base.info -a ${COVDST_DIR}/app_test.info -o ${COVDST_DIR}/app_full.info
-                       COMMAND ${PERL} ${LCOV} ${LCOV_ARGS} -e ${COVDST_DIR}/app_full.info -o ${COVDST_DIR}/app_stripped_i.info ${COVERAGE_INCLUDED}
-                       COMMAND ${PERL} ${LCOV} ${LCOV_ARGS} -r ${COVDST_DIR}/app_stripped_i.info -o ${COVDST_DIR}/app_stripped.info ${COVERAGE_EXCLUDED}
-                       DEPENDS run_tests )
+    add_custom_target( coverage_run_tests
+                       COMMAND ctest -V ${IGNORE_ERROR}
+                       DEPENDS coverage_initial )
 
-    if( CI_MODE AND JENKINS )
+    add_custom_target( coverage_process_test_data
+                       COMMAND ${PERL_EXECUTABLE} ${LCOV_EXECUTABLE} ${LCOV_ARGS} -c --no-external -d ${CMAKE_BINARY_DIR} -b ${COVSRC_DIR} -o ${COVDST_DIR}/app_test.info
+                       DEPENDS coverage_run_tests )
 
-        find_program( LCOV_XML lcov_cobertura.py )
-        if( NOT EXISTS ${LCOV_XML} )
-            message( FATAL_ERROR "lcov_cobertura is not installed" )
-        endif()
+    add_custom_target( coverage_combine
+                       COMMAND ${PERL_EXECUTABLE} ${LCOV_EXECUTABLE} ${LCOV_ARGS} -a ${COVDST_DIR}/app_base.info -a ${COVDST_DIR}/app_test.info -o ${COVDST_DIR}/app_full.info
+                       DEPENDS coverage_process_test_data )
 
-        set( COVERAGE_FILE coverage.xml )
+    if( COVERAGE_EXCLUDED )
+        add_custom_target( coverage_filter_included
+                           COMMAND ${PERL_EXECUTABLE} ${LCOV_EXECUTABLE} ${LCOV_ARGS} -e ${COVDST_DIR}/app_full.info -o ${COVDST_DIR}/app_stripped_i.info ${COVERAGE_INCLUDED}
+                           DEPENDS coverage_combine )
 
-        add_custom_target( coverage_report
-                           COMMAND ${LCOV_XML} -b ${COVSRC_DIR} -o ${COVDST_DIR}/${COVERAGE_FILE} ${COVDST_DIR}/app_stripped.info
-                           DEPENDS coverage_process )
-
-        add_dependencies( ci coverage_report )
-
-    elseif( NOT CI_MODE )
-
-        find_program( GENHTML genhtml PATHS ${LCOV_PATHS} )
-        if( NOT EXISTS ${GENHTML} )
-            message( FATAL_ERROR "genhtml is not installed" )
-        endif()
-
-        add_custom_target( coverage_report
-                           COMMAND ${PERL} ${GENHTML} ${LCOV_ARGS} -s ${COVDST_DIR}/app_stripped.info -o ${COVDST_DIR} --demangle-cpp --title "Unit Tests" --rc genhtml_charset=cp-1252
-                           DEPENDS coverage_process )
-
+        add_custom_target( coverage_process
+                           COMMAND ${PERL_EXECUTABLE} ${LCOV_EXECUTABLE} ${LCOV_ARGS} -r ${COVDST_DIR}/app_stripped_i.info -o ${COVDST_DIR}/app_stripped.info ${COVERAGE_EXCLUDED}
+                           DEPENDS coverage_filter_included )
+    else()
+        add_custom_target( coverage_process
+                           COMMAND ${PERL_EXECUTABLE} ${LCOV_EXECUTABLE} ${LCOV_ARGS} -e ${COVDST_DIR}/app_full.info -o ${COVDST_DIR}/app_stripped.info ${COVERAGE_INCLUDED}
+                           DEPENDS coverage_combine )
     endif()
 
-endif( )
+    add_custom_target( coverage_report
+                       COMMAND ${PERL_EXECUTABLE} ${GENHTML_EXECUTABLE} ${GENHTML_ARGS} -s ${COVDST_DIR}/app_stripped.info -o ${COVDST_DIR} --demangle-cpp --title "Unit Tests" --rc genhtml_charset=cp-1252
+                       DEPENDS coverage_process )
+
+endif()
+
+#
+# Coverage with Visual Studio
+#
 
 if( COVERAGE AND MSVC )
 
@@ -145,7 +114,7 @@ if( COVERAGE AND MSVC )
     endif()
 
     set( OPENCPPCOV_ARGS --cover_children )
-    set( COVSRC_PATH ${CMAKE_SOURCE_DIR}/prod/sources/* )
+    set( COVSRC_PATH ${CMAKE_SOURCE_DIR}/lib/sources/* )
 
     if( NOT COVERAGE_VERBOSE )
         set( OPENCPPCOV_ARGS -q ${OPENCPPCOV_ARGS} )
@@ -162,6 +131,6 @@ if( COVERAGE AND MSVC )
 
     add_custom_target( run_coverage
                        COMMAND ${OPENCPPCOVERAGE} ${OPENCPPCOV_ARGS} --export_type ${COV_OUTTYPE}:${COVDST_DIR} --sources ${COVSRC_PATH} -- ${CMAKE_CTEST_COMMAND} ${CTEST_ARGS}
-                       DEPENDS build )
+                       DEPENDS build_tests )
 
-endif( )
+endif()

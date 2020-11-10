@@ -1,13 +1,22 @@
 cmake_minimum_required( VERSION 3.3 )
 
-project( ProjectTemplate.AllTests )
+option( ENABLE_TEST "Enable building tests" ON )
+option( COVERAGE_VERBOSE "Coverage analysis is performed in verbose mode" OFF )
 
-enable_testing()
+if( ENABLE_TEST )
 
-include( CommonTestTargets.cmake )
+    enable_testing()
 
-#
-# Include all the subdirectories with your test modules
-#
-add_subdirectory( ExamplePrivateClass )
-add_subdirectory( ExamplePublicClass )
+    add_custom_target( build_tests )
+
+    include( CommonTestTargets.cmake )
+
+    #
+    # Test modules
+    #
+
+    #>>> Add all the subdirectories with your test modules
+    add_subdirectory( ExamplePrivateClass )
+    add_subdirectory( ExamplePublicClass )
+
+endif()

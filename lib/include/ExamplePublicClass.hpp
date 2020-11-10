@@ -1,19 +1,21 @@
  /**
  * @file
- * @brief      Example private header
+ * @brief      Example public header
  * @project    Project Template
  * @authors    Jesus Gonzalez <jgonzalez@gdr-sistemas.com>
  * @copyright  Copyright (c) 2020 Jesus Gonzalez. All rights reserved.
  * @license    See LICENSE.txt
  */
 
-#ifndef EXAMPLEPRIVATECLASS_HPP_
-#define EXAMPLEPRIVATECLASS_HPP_
+#ifndef ProjectTemplate_ExamplePublicClass_HPP_
+#define ProjectTemplate_ExamplePublicClass_HPP_
 
-class ExamplePrivateClass {
+#include "ProjectTemplateConfig.hpp"
+
+class ProjectTemplate_API ExamplePublicClass {
 public:
 
-    int f2(int a, int b);
+    int f1(int a, int b);
 
 };
 

@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief      Unit tests for the "UnitUnderTest" class
+ * @brief      Unit tests template
  * @project    Project Template
  * @authors    Your Name <yourname@example.com>
  * @copyright  Copyright (c) YEAR Whatever. All rights reserved.
@@ -16,7 +16,7 @@
 
 #include "UnitUnderTest.hpp"
 
-#include "OtherClass_expect.hpp"
+#include "MockedClass_expect.hpp"
 
 using CppUMockGen::IgnoreParameter;
 
@@ -28,7 +28,7 @@ using CppUMockGen::IgnoreParameter;
  *                          TEST GROUP DEFINITION
  *===========================================================================*/
 
-TEST_GROUP( UnitUnderTest )
+TEST_GROUP( TestModule )
 {
 };
 
@@ -36,7 +36,7 @@ TEST_GROUP( UnitUnderTest )
  *                    TEST CASES IMPLEMENTATION
  *===========================================================================*/
 
-TEST( UnitUnderTest, f1 )
+TEST( TestModule, f1 )
 {
     // Prepare
     ExamplePublicClass c;

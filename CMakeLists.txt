@@ -1,9 +1,8 @@
 cmake_minimum_required( VERSION 3.3 )
 
-project( ProjectTemplate.Top )
+#>>> Edit the project name
+project( ProjectTemplateLib.Top )
 
-option( ENABLE_TEST "Enable building tests" ON )
-option( ENABLE_INSTALLER "Enable building installer" OFF )
 option( CI_MODE "Enable continuous integration mode" OFF )
 
 if( CMAKE_CONFIGURATION_TYPES )
@@ -12,6 +11,8 @@ else()
     set( DEFAULT_BUILD_TYPE "Release" )
 
     set( BUILD_TYPES_LIST "Debug" "Release" "RelWithDebInfo" "MinSizeRel" "Coverage" )
+
+    set_property(GLOBAL PROPERTY DEBUG_CONFIGURATIONS "Debug;Coverage" )
 
     string( REPLACE ";" " " BUILD_TYPES_STRLIST "${BUILD_TYPES_LIST}" )
     
@@ -50,8 +51,36 @@ endif()
 
 add_custom_target( build )
 
-add_subdirectory( prod )
+add_subdirectory( lib )
+add_subdirectory( test )
+add_subdirectory( examples )
 
-if( ENABLE_TEST )
-    add_subdirectory( test )
+set( CONFIG_MSG "
+--------------------------------------------------------------------------
+                            CONFIGURATION
+--------------------------------------------------------------------------
+
+Build Options:" )
+
+if( DEFINED CMAKE_BUILD_TYPE )
+set( CONFIG_MSG "${CONFIG_MSG}
+    CMAKE_BUILD_TYPE:                   ${CMAKE_BUILD_TYPE}" )
 endif()
+
+set( CONFIG_MSG "${CONFIG_MSG}
+    BUILD_SHARED_LIB:                   ${BUILD_SHARED_LIB}
+    BUILD_STATIC_LIB:                   ${BUILD_STATIC_LIB}
+    CI_MODE:                            ${CI_MODE}
+
+Configured Features:
+    ENABLE_TEST:                        ${ENABLE_TEST}
+    COVERAGE:                           ${COVERAGE}
+    COVERAGE_VERBOSE:                   ${COVERAGE_VERBOSE}
+    ENABLE_INSTALLER:                   ${ENABLE_INSTALLER}
+    BUILD_EXAMPLES:                     ${BUILD_EXAMPLES}
+    INSTALL_EXAMPLES:                   ${INSTALL_EXAMPLES}
+
+--------------------------------------------------------------------------
+" )
+
+message( STATUS ${CONFIG_MSG} )

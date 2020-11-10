@@ -24,9 +24,25 @@ if ($env:GenerateInstaller)
         throw "Installer generation is only supported for release builds"
     }
     
-    switch -Wildcard ($env:Platform)
+    switch -regex ($env:Platform)
     {
-        'MinGW*'
+        'MSVC*'
+        {
+            if ($env:APPVEYOR)
+            {
+                $logger_arg = '/logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"'
+            }
+            else
+            {
+                $logger_arg = ''
+            }
+
+            $msbuild_cmd = Get-MsBuildCmd
+            
+            Invoke-Command "$msbuild_cmd $logger_arg package.vcxproj" "$build_dir"
+        }
+
+        '(MinGW|TDM-GCC).*'
         {
             $mingw_path = Get-MinGWBin
 
@@ -38,14 +54,32 @@ if ($env:GenerateInstaller)
             Remove-PathFolder $mingw_path
         }
 
+        'LINUX-GCC'
+        {
+            Invoke-Command "make package" "$build_dir"
+        }
+
         default
         {
-            throw "Installer generation is only supported for MinGW builds"
+            throw "Installer generation is not supported for the current platform"
         }
     }
 }
 
 if ($env:PublishArtifacts)
 {
-    Get-ChildItem $build_dir\*.exe | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+    switch -regex ($env:Platform)
+    {
+        default
+        {
+            Get-ChildItem -Path $build_dir/*.exe | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+            Get-ChildItem -Path $build_dir/*.zip | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+        }
+        
+        'LINUX-GCC'
+        {
+            Get-ChildItem -Path $build_dir/*.deb | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+            Get-ChildItem -Path $build_dir/*.tar.xz | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+        }
+    }
 }

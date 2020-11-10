@@ -1,19 +1,19 @@
  /**
  * @file
- * @brief      Example public header
+ * @brief      Example private header
  * @project    Project Template
  * @authors    Jesus Gonzalez <jgonzalez@gdr-sistemas.com>
  * @copyright  Copyright (c) 2020 Jesus Gonzalez. All rights reserved.
  * @license    See LICENSE.txt
  */
 
-#ifndef EXAMPLEPUBLICCLASS_HPP_
-#define EXAMPLEPUBLICCLASS_HPP_
+#ifndef ProjectTemplate_ExamplePrivateClass_HPP_
+#define ProjectTemplate_ExamplePrivateClass_HPP_
 
-class ExamplePublicClass {
+class ExamplePrivateClass {
 public:
 
-    int f1(int a, int b);
+    int f2(int a, int b);
 
 };
 
