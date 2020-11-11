@@ -8,6 +8,6 @@ if( BUILD_EXAMPLES AND (BUILD_SHARED_LIB OR BUILD_STATIC_LIB) )
     #
 
     #>>> Add all the subdirectories with your examples
-    add_subdirectory( Example1 )
+    #add_subdirectory( Example1 )
 
 endif()

@@ -41,8 +41,6 @@ This repository is just a template for a library built using [CMake](https://cma
 
 11. Edit `examples/CMakefile.txt` and add all the subdirectories for your examples.
 
-12. Delete all the test, production and example example files and directories.
-
 13. Replace `LICENSE.txt` with your project's license file.
 
 14. Create a build directory under the top directory (e.g. `build/`), and inside it execute `cmake .. G "<GeneratorOfYourChoice>"` (add any other configuration options that you like).

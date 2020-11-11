@@ -21,8 +21,7 @@ endif( MSVC )
 
 #>>> Add your source files to the following list
 set( SRC_LIST
-     sources/ExamplePublicClass.cpp
-     sources/ExamplePrivateClass.cpp
+#     sources/SourceFile.cpp
 )
 
 #
@@ -31,8 +30,8 @@ set( SRC_LIST
 
 #>>> Add your header files to the following list
 set( INC_LIST
-     sources/ExamplePrivateClass.hpp
-     include/ExamplePublicClass.hpp
+#     sources/PrivateHeaderFile.hpp
+#     include/PublicHeaderFile.hpp
 )
 
 #

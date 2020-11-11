@@ -16,7 +16,6 @@ if( ENABLE_TEST )
     #
 
     #>>> Add all the subdirectories with your test modules
-    add_subdirectory( ExamplePrivateClass )
-    add_subdirectory( ExamplePublicClass )
+    #add_subdirectory( TestModule1 )
 
 endif()
