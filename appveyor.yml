@@ -43,12 +43,12 @@ environment:
     GenerateInstaller: True
     PublishArtifacts: True
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-  - Platform: MSVC64
-    Configuration: Release
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-  - Platform: MSVC64
-    Configuration: Release
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+  # - Platform: MSVC64
+  #   Configuration: Release
+  #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+  # - Platform: MSVC64
+  #   Configuration: Release
+  #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
 
 for:
   -
