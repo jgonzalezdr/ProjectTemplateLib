@@ -98,7 +98,7 @@ if ( BUILD_SHARED_LIB )
     #>>> Uncomment and edit the following commands to add compile definitions
     #target_compile_definitions( ${PROJECT_NAME} PUBLIC "${PROJECT_NAME}_MY_DEFINITION" )
 
-    add_dependencies( build ${PROJECT_NAME} )
+    add_dependencies( ${TARGET_NAMESPACE}build ${PROJECT_NAME} )
 
     #
     # C++ standard
@@ -139,7 +139,7 @@ if ( BUILD_STATIC_LIB )
     #>>> Uncomment and edit the following commands to add compile definitions
     #target_compile_definitions( ${PROJECT_NAME}_static PUBLIC "${PROJECT_NAME}_MY_DEFINITION" )
 
-    add_dependencies( build ${PROJECT_NAME}_static )
+    add_dependencies( ${TARGET_NAMESPACE}build ${PROJECT_NAME}_static )
 
     #
     # C++ standard
