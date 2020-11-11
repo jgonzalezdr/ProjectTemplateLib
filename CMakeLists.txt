@@ -5,6 +5,10 @@ project( ProjectTemplateLib.Top )
 
 option( CI_MODE "Enable continuous integration mode" OFF )
 
+if( TARGET_NAMESPACE )
+    set( TARGET_NAMESPACE "${TARGET_NAMESPACE}." )
+endif()
+
 if( CMAKE_CONFIGURATION_TYPES )
     option( COVERAGE "Enable coverage analysis" ON )
 else()
@@ -49,11 +53,17 @@ if( WIN32 AND NOT MSVC )
     add_definitions( -DWIN32 )
 endif()
 
-add_custom_target( build )
+add_custom_target( ${TARGET_NAMESPACE}build )
 
 add_subdirectory( lib )
 add_subdirectory( test )
 add_subdirectory( examples )
+
+if( TARGET_NAMESPACE )
+    string( REGEX REPLACE "\.$" "" PRINTED_TARGET_NAMESPACE ${TARGET_NAMESPACE} )
+else()
+    set( PRINTED_TARGET_NAMESPACE "{empty}" )
+endif()
 
 set( CONFIG_MSG "
 --------------------------------------------------------------------------
@@ -71,6 +81,7 @@ set( CONFIG_MSG "${CONFIG_MSG}
     BUILD_SHARED_LIB:                   ${BUILD_SHARED_LIB}
     BUILD_STATIC_LIB:                   ${BUILD_STATIC_LIB}
     CI_MODE:                            ${CI_MODE}
+    TARGET_NAMESPACE:                   ${PRINTED_TARGET_NAMESPACE}
 
 Configured Features:
     ENABLE_TEST:                        ${ENABLE_TEST}

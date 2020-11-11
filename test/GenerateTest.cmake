@@ -34,7 +34,7 @@ else()
     endif()
 endif()
 
-add_dependencies( build_tests ${PROJECT_NAME} )
+add_dependencies( ${TARGET_NAMESPACE}build_tests ${PROJECT_NAME} )
 
 if( CI_MODE )
     set( TEST_ARGS -ojunit -v )

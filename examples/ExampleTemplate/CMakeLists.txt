@@ -33,7 +33,7 @@ add_executable( ${PROJECT_NAME} ${SRC_LIST} )
 #>>> Uncomment and edit the following commands to add compile definitions
 #target_compile_definitions( ${PROJECT_NAME} PUBLIC "${PROJECT_NAME}_MY_DEFINITION" )
 
-add_dependencies( build ${PROJECT_NAME} )
+add_dependencies( ${TARGET_NAMESPACE}build_examples ${PROJECT_NAME} )
 
 #
 # C++ standard
@@ -47,7 +47,7 @@ add_dependencies( build ${PROJECT_NAME} )
 # External libraries
 #
 
-string( REPLACE "Lib.Top" "" LIBRARY_NAME ${CMAKE_PROJECT_NAME} )
+string( REGEX REPLACE "(Lib)?.Top$" "" LIBRARY_NAME ${CMAKE_PROJECT_NAME} )
 
 if( BUILD_STATIC_LIB )
     target_link_libraries( ${PROJECT_NAME} ${LIBRARY_NAME}_static )
@@ -57,7 +57,7 @@ elseif( BUILD_SHARED_LIB )
     add_custom_target( ${PROJECT_NAME}_CopySharedLibs ALL
                        DEPENDS ${LIBRARY_NAME}
                        COMMAND cmake -E copy "$<TARGET_FILE:${LIBRARY_NAME}>" "$<TARGET_FILE_DIR:${PROJECT_NAME}>" )
-    add_dependencies( build ${PROJECT_NAME}_CopySharedLibs )
+    add_dependencies( ${TARGET_NAMESPACE}build ${PROJECT_NAME}_CopySharedLibs )
 endif()
 
 #>>> Uncomment and edit the following commands to add additional external libraries
