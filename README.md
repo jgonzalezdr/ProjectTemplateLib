@@ -1,15 +1,17 @@
 
 CMake Library Project Template
 ===========
-[![Build status](https://ci.appveyor.com/api/projects/status/irafbluexmulat6u/branch/master?svg=true)](https://ci.appveyor.com/project/jgonzalezdr/projecttemplatelib/branch/master)
-[![codecov](https://codecov.io/gh/jgonzalezdr/ProjectTemplateLib/branch/master/graph/badge.svg)](https://codecov.io/gh/jgonzalezdr/ProjectTemplateLib)
+[![Build status](https://ci.appveyor.com/api/projects/status/irafbluexmulat6u/branch/main?svg=true)](https://ci.appveyor.com/project/jgonzalezdr/projecttemplatelib/branch/main)
+[![codecov](https://codecov.io/gh/jgonzalezdr/ProjectTemplateLib/branch/main/graph/badge.svg)](https://codecov.io/gh/jgonzalezdr/ProjectTemplateLib)
 ## About
 
 This repository is just a template for a library built using [CMake](https://cmake.org/), and using [cpputest](http://cpputest.github.io/) for unit test execution.
 
 ## Usage
 
-1.  Download all the [files from this repository as a ZIP file](https://github.com/jgonzalezdr/projecttemplatelib/archive/master.zip) and unzip them to your project base directory.
+1.  Download all the [files from this repository as a ZIP file](https://github.com/jgonzalezdr/projecttemplatelib/archive/main.zip) and unzip them to your project base directory.
+
+> The _main_ branch is populated with some example files. You may download a [version without any examples](https://github.com/jgonzalezdr/projecttemplatelib/archive/unpopulated.zip) from the _unpopulated_ branch.
 
 2. Edit the top level `CMakefile.txt` and replace _ProjectTemplate_ in the project command with your own project name (leave the .Top suffix).
 
@@ -32,7 +34,7 @@ This repository is just a template for a library built using [CMake](https://cma
 
 9. Edit `test/CMakefile.txt` and add all the subdirectories for your tests.
 
-10. To create examples, copy the `examples/ExampleTemplate/` directory to another directory under `examples/` renaming it with the example name, then:
+10. To create example applications that use the library, copy the `examples/ExampleTemplate/` directory to another directory under `examples/` renaming it with the example name, then:
    - Rename the example implementation file `ExampleTemplate.cpp` according to your example's name.
    - Edit the examples's `CMakefile.txt`:
        - Replace _ProjectTemplate_ and _ExampleTemplate_ in the project command with your own project name and example name (e.g. "_YourProjectName_.Test._YourExampleName_").
@@ -61,9 +63,13 @@ This repository is just a template for a library built using [CMake](https://cma
 ## Requirements
 
 - [cmake](https://cmake.org/) (tested with v3.7.1 and 3.17.2)
-- A C/C++ compiler, either:
-  - [MinGW-w64](https://sourceforge.net/projects/mingw-w64/) (tested with x86_64-6.4.0-posix-seh-rt_v5-rev0 and x86_64-8.1.0-posix-seh-rt_v6-rev0)
-  - [Microsoft Visual Studio](https://www.visualstudio.com/es/downloads/) (tested with Visual Studio Community 2015, 2017 and 2019)
-- [CppUTest](http://cpputest.github.io/) [Optional, not needed if tests are disabled] (tested with v3.7.1, v3.7.2 and v3.8)
-- [LCOV](https://github.com/jgonzalezdr/lcov/releases) [Optional, needed if tests and coverage are enabled using GCC/MinGW] (tested with v1.11.1w)
-- [OpenCppCoverage](https://github.com/OpenCppCoverage/OpenCppCoverage) [Optional, needed if tests and coverage are enabled using Visual Studio 2017 or 2019] (tested with v0.9.6.1 and v0.9.8.0)
+- [CppUTest](http://cpputest.github.io/) [Optional, not needed if tests are disabled] (tested with v3.7.1, v3.7.2, v3.8 and [v3.9.alpha0](https://github.com/jgonzalezdr/cpputest/releases/download/v3.9.alpha0/cpputest-3.9.alpha0.zip))
+- On Windows:
+  - A C/C++ compiler, either:
+    - [MinGW-w64](https://sourceforge.net/projects/mingw-w64/) (tested with v7.3.0, v8.1.0 and [TDM-GCC v9.2.0](https://jmeubank.github.io/tdm-gcc/download/))
+    - [Microsoft Visual Studio](https://www.visualstudio.com/es/downloads/) (tested with Visual Studio Community 2019)
+  - [LCOV for Windows](https://github.com/jgonzalezdr/lcov/releases) [Optional, needed if tests and coverage are enabled using MinGW] (tested with [v1.15.alpha1w](https://github.com/jgonzalezdr/lcov/releases/download/v1.15.alpha1w/lcov-v1.15.alpha1w.zip))
+  - [OpenCppCoverage](https://github.com/OpenCppCoverage/OpenCppCoverage) [Optional, needed if tests and coverage are enabled using Visual Studio 2019] (tested with v0.9.8.0)
+- On Linux:
+  - [GCC](https://gcc.gnu.org/) (tested with v7.5.0, v8.4.0 and v9.3.0)
+  - [LCOV](http://ltp.sourceforge.net/coverage/lcov.php) [Optional, needed if tests and coverage are enabled using GCC] (tested with v1.14)
