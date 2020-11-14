@@ -32,6 +32,7 @@ set( SRC_LIST
 set( INC_LIST
 #     sources/PrivateHeaderFile.hpp
 #     include/PublicHeaderFile.hpp
+     ${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME}Config.hpp
 )
 
 #
@@ -91,7 +92,7 @@ if ( BUILD_SHARED_LIB )
     add_library( ${PROJECT_NAME} SHARED ${SRC_LIST} ${INC_LIST} ${PRODUCT_VERSION_FILES} )
     target_compile_definitions( ${PROJECT_NAME} PUBLIC "${PROJECT_NAME}_SHARED_LIB" )
 
-    target_include_directories( ${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include )
+    target_include_directories( ${PROJECT_NAME} PUBLIC include )
     target_include_directories( ${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/include )
 
     #>>> Uncomment and edit the following commands to add compile definitions
@@ -132,7 +133,7 @@ if ( BUILD_STATIC_LIB )
 
     add_library( ${PROJECT_NAME}_static STATIC ${SRC_LIST} ${INC_LIST} ${PRODUCT_VERSION_FILES} )
 
-    target_include_directories( ${PROJECT_NAME}_static PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include )
+    target_include_directories( ${PROJECT_NAME}_static PUBLIC include )
     target_include_directories( ${PROJECT_NAME}_static PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/include )
 
     #>>> Uncomment and edit the following commands to add compile definitions
