@@ -18,6 +18,14 @@ add_executable( ${PROJECT_NAME} EXCLUDE_FROM_ALL ${PROD_SRC_FILES} ${TEST_SRC_FI
 
 target_link_libraries( ${PROJECT_NAME} ${CppUTest_LIBRARIES} )
 
+#
+# C++ standard
+#
+
+#>>> Uncomment and edit the following commands to set an specific C++ standard
+#set_property( TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11 )
+#set_property( TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED 1 )
+
 add_dependencies( ${TARGET_NAMESPACE}build_tests ${PROJECT_NAME} )
 
 if( CI_MODE )
