@@ -67,8 +67,8 @@ This repository is just a template for a library built using [CMake](https://cma
 
 ## Requirements
 
-- [cmake](https://cmake.org/) (tested with v3.7.1 and 3.17.2)
-- [CppUTest](http://cpputest.github.io/) [Optional, not needed if tests are disabled] (tested with v3.7.1, v3.7.2, v3.8 and [v3.9.alpha0](https://github.com/jgonzalezdr/cpputest/releases/download/v3.9.alpha0/cpputest-3.9.alpha0.zip))
+- [cmake](https://cmake.org/) (≥ v3.3, tested with v3.16.2, 3.17.2 and v3.18.4)
+- [CppUTest](http://cpputest.github.io/) [Optional, not needed if tests are disabled] (≥ v4.0, tested with [v4.0-gdr0](https://github.com/jgonzalezdr/cpputest/releases/tag/v4.0-gdr0))
 - On Windows:
   - A C/C++ compiler, either:
     - [MinGW-w64](https://sourceforge.net/projects/mingw-w64/) (tested with v7.3.0, v8.1.0 and [TDM-GCC v9.2.0](https://jmeubank.github.io/tdm-gcc/download/))
