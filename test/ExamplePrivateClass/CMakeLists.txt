@@ -6,14 +6,10 @@ project( ProjectTemplate.Test.ExamplePrivateClass )
 # Test configuration
 #
 
-set( PROD_DIR ${CMAKE_SOURCE_DIR}/lib )
-set( MOCKS_DIR ${CMAKE_SOURCE_DIR}/test/Mocks )
-
 include_directories(
-    ${PROD_DIR}/sources
-    ${PROD_DIR}/include
-    ${CMAKE_BINARY_DIR}/lib/include
-    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${PROD_SOURCE_DIR}/sources
+    ${PROD_SOURCE_DIR}/include
+    ${PROD_BINARY_DIR}/include
     ${MOCKS_DIR}
 )
 
@@ -22,7 +18,7 @@ include_directories(
 #
 
 set( PROD_SRC_FILES
-     ${PROD_DIR}/sources/ExamplePrivateClass.cpp
+     ${PROD_SOURCE_DIR}/sources/ExamplePrivateClass.cpp
 )
 
 #
