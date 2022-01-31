@@ -3,6 +3,20 @@ cmake_minimum_required( VERSION 3.13 )
 #>>> Edit the project name (don't add any "lib" prefix or suffix!)
 project( ProjectTemplate VERSION 1.0.0 )
 
+if( NOT CMAKE_PROJECT_NAME MATCHES "${PROJECT_NAME}.*" )
+
+    # Seems like we are being imported into another project
+
+    if( TARGET_NAMESPACE )
+        set( TARGET_NAMESPACE "${TARGET_NAMESPACE}." )
+    endif()
+
+    add_custom_target( ${TARGET_NAMESPACE}build )
+
+    unset( CMAKE_MODULE_PATH )
+
+endif()
+
 option( BUILD_STATIC_LIB "Build static library" ON )
 option( BUILD_SHARED_LIB "Build shared library" ON )
 
