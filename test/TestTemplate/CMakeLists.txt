@@ -1,6 +1,6 @@
 cmake_minimum_required( VERSION 3.3 )
 
-project( ProjectTemplate.Test.TestModule )
+project( ProjectTemplateLib.Test.TestModule )
 
 #
 # Test configuration
@@ -37,4 +37,4 @@ set( TEST_SRC_FILES
 # Generate test target
 #
 
-include( ../GenerateTest.cmake )
+include( ${TEST_BASE_DIR}/GenerateTest.cmake )
