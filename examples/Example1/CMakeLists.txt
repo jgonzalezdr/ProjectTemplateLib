@@ -1,6 +1,6 @@
 cmake_minimum_required( VERSION 3.3 )
 
-project( ProjectTemplate.Example.Example1 VERSION 1.0.0 )
+project( ProjectTemplateLib.Example.Example1 VERSION 1.0.0 )
 
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/" )
 
