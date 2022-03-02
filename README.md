@@ -1,8 +1,8 @@
-
 CMake Library Project Template
 ===========
 [![Build status](https://ci.appveyor.com/api/projects/status/irafbluexmulat6u/branch/main?svg=true)](https://ci.appveyor.com/project/jgonzalezdr/projecttemplatelib/branch/main)
 [![codecov](https://codecov.io/gh/jgonzalezdr/ProjectTemplateLib/branch/main/graph/badge.svg)](https://codecov.io/gh/jgonzalezdr/ProjectTemplateLib)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjgonzalezdr%2FProjectTemplateLib.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fjgonzalezdr%2FProjectTemplateLib?ref=badge_shield)
 ## About
 
 This repository is just a template for a library built using [CMake](https://cmake.org/), and using [cpputest](http://cpputest.github.io/) for unit test execution.
@@ -80,3 +80,7 @@ This repository is just a template for a library built using [CMake](https://cma
 - On Linux:
   - [GCC](https://gcc.gnu.org/) (tested with v7.5.0, v8.4.0 and v9.3.0)
   - [LCOV](http://ltp.sourceforge.net/coverage/lcov.php) [Optional, needed if tests and coverage are enabled using GCC] (tested with v1.14)
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjgonzalezdr%2FProjectTemplateLib.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fjgonzalezdr%2FProjectTemplateLib?ref=badge_large)
